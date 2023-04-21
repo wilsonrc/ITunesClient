@@ -89,14 +89,6 @@ fun AlbumCard(item: SearchResultsApiModel) {
             .clickable { showDialog.value = true },
         shape = RoundedCornerShape(8.dp)
     ) {
-        if (showDialog.value) {
-            Dialog(onDismissRequest = { showDialog.value = false }) {
-                AlbumDetailsDialog(item = item) {
-                    showDialog.value = false
-                }
-            }
-        }
-
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -119,6 +111,14 @@ fun AlbumCard(item: SearchResultsApiModel) {
                     fontSize = 14.sp,
                     modifier = Modifier.padding(top = 4.dp)
                 )
+            }
+        }
+
+        if (showDialog.value) {
+            Dialog(onDismissRequest = { showDialog.value = false }) {
+                AlbumDetailsDialog(item = item) {
+                    showDialog.value = false
+                }
             }
         }
     }

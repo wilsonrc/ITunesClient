@@ -8,10 +8,12 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.serialization.json.Json
 
 
 class ApiService(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val json: Json
 ) : IApiService {
 
     override suspend fun search(query: String): Result<SearchApiModel> {
@@ -23,8 +25,7 @@ class ApiService(
                 parameter(SEARCH_ENTITY_PARAM, "album")
             }
 
-            IApiService.getJson()
-                .decodeFromString(SearchApiModel.serializer(), response.bodyAsText())
+            json.decodeFromString(SearchApiModel.serializer(), response.bodyAsText())
         }
     }
 }
