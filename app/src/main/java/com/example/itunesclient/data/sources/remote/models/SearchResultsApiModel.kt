@@ -1,27 +1,28 @@
 package com.example.itunesclient.data.sources.remote.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchResultsApiModel(
-    val wrapperType: String,
+    @SerialName("collectionType")
     val collectionType: String,
+    @SerialName("artistId")
     val artistId: Int,
-    val collectionId: Int,
-    val amgArtistId: Int,
+    @SerialName("artistName")
     val artistName: String,
+    @SerialName("collectionName")
     val collectionName: String,
-    val collectionCensoredName: String,
-    val artistViewUrl: String,
-    val collectionViewUrl: String,
-    val artworkUrl60: String,
+    @SerialName("artworkUrl100")
     val artworkUrl100: String,
-    val collectionPrice: Double,
-    val collectionExplicitness: String,
-    val trackCount: Int,
+    @SerialName("collectionPrice")
+    val collectionPrice: Double? = null,
+    @SerialName("copyright")
     val copyright: String,
-    val country: String,
+    @SerialName("currency")
     val currency: String,
+    @SerialName("releaseDate")
     val releaseDate: String,
+    @SerialName("primaryGenreName")
     val primaryGenreName: String
 )

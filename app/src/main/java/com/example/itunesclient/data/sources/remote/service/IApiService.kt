@@ -20,14 +20,16 @@ interface IApiService {
                     }
                     install(ContentNegotiation){
                         json(
-                            Json {
-                                ignoreUnknownKeys = true
-                                prettyPrint = true
-                            }
+                            json = getJson()
                         )
                     }
                 }
            )
        }
+
+        fun getJson() = Json {
+            ignoreUnknownKeys = true
+            prettyPrint = true
+        }
     }
 }

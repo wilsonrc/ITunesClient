@@ -5,9 +5,9 @@ import com.example.itunesclient.data.sources.remote.ApiRoutes.SEARCH_ENTITY_PARA
 import com.example.itunesclient.data.sources.remote.ApiRoutes.SEARCH_TERM_PARAM
 import com.example.itunesclient.data.sources.remote.models.SearchApiModel
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 
 class ApiService(
@@ -15,25 +15,16 @@ class ApiService(
 ) : IApiService {
 
     override suspend fun search(query: String): Result<SearchApiModel> {
-        return try {
+        return runCatching {
             val response = client.get {
+                contentType(ContentType.Application.Json)
                 url(SEARCH)
                 parameter(SEARCH_TERM_PARAM, query)
                 parameter(SEARCH_ENTITY_PARAM, "album")
             }
-           Result.success(response.body<SearchApiModel>())
-        } catch (ex: RedirectResponseException) {
-            // 3xx - responses
-            println("Error: ${ex.response.status.description}")
-            Result.failure(Exception("Error: ${ex.response.status.description}"))
-        } catch (ex: ClientRequestException) {
-            // 4xx - responses
-            println("Error: ${ex.response.status.description}")
-            Result.failure(Exception("Error: ${ex.response.status.description}"))
-        } catch (ex: ServerResponseException) {
-            // 5xx - response
-            println("Error: ${ex.response.status.description}")
-            Result.failure(Exception("Error: ${ex.response.status.description}"))
+
+            IApiService.getJson()
+                .decodeFromString(SearchApiModel.serializer(), response.bodyAsText())
         }
     }
 }
