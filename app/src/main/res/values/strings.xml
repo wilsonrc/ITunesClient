@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ITunesClient</string>
+
+    <!--Dialog Titles-->
+    <string name="dialog_album_details_title">Album Details</string>
+    <string name="dialog_album_details_album">Album: %s</string>
+    <string name="dialog_album_details_release_date">Release Date: %s</string>
+    <string name="dialog_album_details_primary_genre">Primary Genre: %s</string>
+    <string name="dialog_album_details_price">Price: %s %s</string>
+    <string name="dialog_album_details_copy_right">CopyRight: %s</string>
+    <string name="dialog_dismiss_button">OK</string>
 </resources>
