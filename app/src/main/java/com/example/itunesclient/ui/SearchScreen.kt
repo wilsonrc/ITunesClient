@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,8 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.itunesclient.R
 import com.example.itunesclient.data.SearchResult
-import com.example.itunesclient.data.SearchResults
-import com.example.itunesclient.data.sources.remote.models.SearchResultsApiModel
 import com.example.itunesclient.ui.theme.ITunesClientTheme
 
 @Composable
@@ -181,7 +178,7 @@ fun SearchBar(
             modifier = modifier
                 .weight(1f)
                 .background(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.background,
                     shape = RoundedCornerShape(8.dp)
                 ),
             label = { Text("Search") },
@@ -203,7 +200,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Filled.Search,
                 contentDescription = "Search Icon",
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
