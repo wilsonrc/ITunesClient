@@ -1,6 +1,7 @@
 package com.example.itunesclient.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.example.itunesclient.data.sources.remote.models.SearchResultsApiModel
@@ -77,14 +79,24 @@ private fun EmptyView() {
 
 @Composable
 fun AlbumCard(item: SearchResultsApiModel) {
+    val showDialog = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .shadow(4.dp, RoundedCornerShape(8.dp))
-            .zIndex(1f),
+            .zIndex(1f)
+            .clickable { showDialog.value = true },
         shape = RoundedCornerShape(8.dp)
     ) {
+        if (showDialog.value) {
+            Dialog(onDismissRequest = { showDialog.value = false }) {
+                AlbumDetailsDialog(item = item) {
+                    showDialog.value = false
+                }
+            }
+        }
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -103,7 +115,7 @@ fun AlbumCard(item: SearchResultsApiModel) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Release Date: ${item.releaseDate}",
+                    text = "Release Date: ${item.releaseDate.toDateTime()}",
                     fontSize = 14.sp,
                     modifier = Modifier.padding(top = 4.dp)
                 )
@@ -158,6 +170,35 @@ fun SearchBar(
                 contentDescription = "Search Icon",
                 tint = Color.White
             )
+        }
+    }
+}
+
+@Composable
+fun AlbumDetailsDialog(
+    item: SearchResultsApiModel,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Album Details", style = MaterialTheme.typography.headlineSmall)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Album: ${item.collectionName}")
+                Text("Release Date: ${item.releaseDate.toDateTime()}")
+                Text("Primary Genre: ${item.primaryGenreName}") // Add Primary Genre Name
+                Text("Price: ${item.collectionPrice} ${item.currency}") // Add Collection Price and Currency
+                Text("Copyright: ${item.copyright}") // Add Copyright
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
+                    Text("Ok")
+                }
+            }
         }
     }
 }
