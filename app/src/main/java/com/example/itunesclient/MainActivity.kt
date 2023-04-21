@@ -14,7 +14,9 @@ import com.example.itunesclient.ui.SearchScreen
 import com.example.itunesclient.ui.SearchUiState
 import com.example.itunesclient.ui.SearchViewModel
 import com.example.itunesclient.ui.theme.ITunesClientTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val searchViewModel: SearchViewModel by viewModels()

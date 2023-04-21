@@ -7,23 +7,20 @@ import com.example.itunesclient.data.sources.SearchRepository
 import com.example.itunesclient.data.sources.remote.ISearchRepository
 import com.example.itunesclient.data.sources.remote.SearchRemoteDataSource
 import com.example.itunesclient.data.sources.remote.service.IApiService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(
-
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchRepository: ISearchRepository
 ) : ViewModel() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Empty)
     val searchUiState = _searchUiState
-    private val searchRepository: ISearchRepository = SearchRepository(
-        remoteDataSource = SearchRemoteDataSource(
-            IApiService.create()
-        ),
-        dispatcher = Dispatchers.IO
-    )
 
     fun search(query: String) = viewModelScope.launch {
         _searchUiState.value = SearchUiState.Loading
