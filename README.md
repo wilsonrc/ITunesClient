@@ -33,6 +33,10 @@ Language and Libraries Used
 
 ## Kotlin
 Kotlin is a modern, expressive, and safe programming language fully interoperable with Java. It is used as the primary language for this project.
+
+## Jetpack Compose
+Jetpack Compose is a modern, declarative UI toolkit for building native Android applications. It was developed by Google to simplify and accelerate the process of creating UIs for Android apps.
+
 ## Ktor
 Ktor is an open-source, asynchronous framework for building web applications, APIs, and microservices in Kotlin. Developed by JetBrains, it allows developers to create server and client-side applications in a concise and expressive manner, leveraging Kotlin's language features and built-in coroutines for efficient asynchronous programming.
 ## Hilt
