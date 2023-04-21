@@ -131,14 +131,12 @@ fun SearchBar(
     onSearch: (String) -> Unit
 ) {
     val (searchText, setSearchText) = remember { mutableStateOf("") }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Search Input
         OutlinedTextField(
             value = searchText,
             onValueChange = { text ->
@@ -157,7 +155,6 @@ fun SearchBar(
             shape = RoundedCornerShape(8.dp)
         )
 
-        // Search Icon Button
         IconButton(
             onClick = { onSearch(searchText) },
             modifier = Modifier
