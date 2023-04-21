@@ -4,15 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -20,39 +19,65 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.itunesclient.R
+import com.example.itunesclient.data.SearchResult
+import com.example.itunesclient.data.SearchResults
 import com.example.itunesclient.data.sources.remote.models.SearchResultsApiModel
+import com.example.itunesclient.ui.theme.ITunesClientTheme
 
 @Composable
-fun SearchScreen(onSearch: (String) -> Unit, uiState: SearchUiState) {
+fun SearchScreen(searchViewModel: SearchViewModel = hiltViewModel(), modifier: Modifier) {
+    val uiState by searchViewModel.searchUiState.collectAsState()
+    SearchScreen(
+        onSearch = { searchViewModel.search(it) },
+        uiState = uiState,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SearchScreen(onSearch: (String) -> Unit, uiState: SearchUiState, modifier: Modifier) {
     Column {
-        SearchBar {
-            onSearch(it)
-        }
+        SearchBar(
+            onSearch = {
+                onSearch(it)
+            },
+            modifier = modifier
+        )
         when (uiState) {
             is SearchUiState.Empty -> {
-                //ADD THE TEXT TO THE CENTER OF THE SCREEN
                 EmptyView()
             }
             is SearchUiState.Loading -> {
                 LoadingIndicator()
             }
             is SearchUiState.Success -> {
-                val list = uiState.albums
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn {
-                    items(uiState.albums.size) {
-                        AlbumCard(item = list[it])
-                    }
-                }
+                AlbumList(uiState.albums)
             }
             is SearchUiState.Error -> {
+                ErrorView(message = uiState.message)
             }
+        }
+    }
+}
+
+@Composable
+private fun AlbumList(albums: List<SearchResult>) {
+    LazyColumn {
+        items(
+            items = albums,
+            key = {
+                it.collectionId
+            }
+        ) {
+            AlbumCard(item = it)
         }
     }
 }
@@ -80,7 +105,17 @@ private fun EmptyView() {
 }
 
 @Composable
-fun AlbumCard(item: SearchResultsApiModel) {
+private fun ErrorView(message: String) {
+    Text(
+        text = message,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+}
+
+@Composable
+fun AlbumCard(item: SearchResult) {
     val showDialog = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
@@ -128,13 +163,14 @@ fun AlbumCard(item: SearchResultsApiModel) {
 
 @Composable
 fun SearchBar(
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    modifier: Modifier
 ) {
     val (searchText, setSearchText) = remember { mutableStateOf("") }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
@@ -142,7 +178,7 @@ fun SearchBar(
             onValueChange = { text ->
                 setSearchText(text)
             },
-            modifier = Modifier
+            modifier = modifier
                 .weight(1f)
                 .background(
                     color = Color.White,
@@ -157,7 +193,7 @@ fun SearchBar(
 
         IconButton(
             onClick = { onSearch(searchText) },
-            modifier = Modifier
+            modifier = modifier
                 .padding(start = 8.dp)
                 .background(
                     shape = RoundedCornerShape(20),
@@ -175,7 +211,7 @@ fun SearchBar(
 
 @Composable
 fun AlbumDetailsDialog(
-    item: SearchResultsApiModel,
+    item: SearchResult,
     onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
@@ -222,5 +258,46 @@ fun AlbumDetailsDialog(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    ITunesClientTheme {
+        SearchScreen(
+            onSearch = { },
+            uiState = SearchUiState.Success(
+                listOf(
+                    SearchResult(
+                        artistName = "Artist Name",
+                        collectionName = "Collection Name",
+                        artworkUrl100 = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/7b/7a/7b/7b7a7b7c-8b1f-8b1f-8b1f-8b1f8b1f8b1f/source/100x100bb.jpg",
+                        releaseDate = "2021-01-01",
+                        primaryGenreName = "Genre",
+                        collectionPrice = 10.0,
+                        currency = "USD",
+                        artistId = 1,
+                        copyright = "Copyright",
+                        collectionType = "Album",
+                        collectionId = 1
+                    ),
+                    SearchResult(
+                        artistName = "Artist Name",
+                        collectionName = "Collection Name",
+                        artworkUrl100 = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/7b/7a/7b/7b7a7b7c-8b1f-8b1f-8b1f-8b1f8b1f8b1f/source/100x100bb.jpg",
+                        releaseDate = "2021-01-01",
+                        primaryGenreName = "Genre",
+                        collectionPrice = 10.0,
+                        currency = "USD",
+                        artistId = 1,
+                        copyright = "Copyright",
+                        collectionType = "Album",
+                        collectionId = 2
+                    )
+                )
+            ),
+            modifier = Modifier
+        )
     }
 }

@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class SearchResultsApiModel(
     @SerialName("collectionType")
     val collectionType: String,
+    @SerialName("collectionId")
+    val collectionId: Int,
     @SerialName("artistId")
     val artistId: Int,
     @SerialName("artistName")
