@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.itunesclient.R
 import com.example.itunesclient.data.SearchResult
@@ -31,7 +32,7 @@ import com.example.itunesclient.ui.theme.ITunesClientTheme
 
 @Composable
 fun SearchScreen(searchViewModel: SearchViewModel = hiltViewModel(), modifier: Modifier) {
-    val uiState by searchViewModel.searchUiState.collectAsState()
+    val uiState by searchViewModel.searchUiState.collectAsStateWithLifecycle()
     SearchScreen(
         onSearch = { searchViewModel.search(it) },
         uiState = uiState,

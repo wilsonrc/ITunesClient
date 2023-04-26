@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.itunesclient.data.sources.remote.ISearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,7 +15,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Empty)
-    val searchUiState = _searchUiState
+    val searchUiState : StateFlow<SearchUiState> = _searchUiState
 
     fun search(query: String) = viewModelScope.launch {
         _searchUiState.value = SearchUiState.Loading
