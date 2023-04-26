@@ -10,8 +10,9 @@ This application shows the search results of the Itunes API using MAD (Modern An
 This project is a sample Android application built using Kotlin, implementing the MVVM (Model-View-ViewModel) architectural pattern. The app fetches data from a remote server and stores it locally using the Room database. The app uses Retrofit for network calls, Hilt for dependency injection, and Room for local data persistence.
 
 ## App Preview
-![Home Screen](https://user-images.githubusercontent.com/11259931/233521428-e788d9c1-4c9a-494d-ba26-31aa31a2ea0a.PNG)
-![Home Screen Dialog](https://user-images.githubusercontent.com/11259931/233521445-c44e1619-1de3-49ae-939c-de4f12aa6d3f.PNG)
+![Home Screen](https://user-images.githubusercontent.com/11259931/233703870-5c217dcc-11f4-4b64-bd40-0cf7a5a71062.PNG)
+![Home Screen Dialog](https://user-images.githubusercontent.com/11259931/233703900-fe176f19-276a-4665-aec7-c5d2e8bbe202.PNG)
+
 
 ### Architecture
 ![image](https://user-images.githubusercontent.com/11259931/230985378-b18c3140-ee91-4778-a152-a3e45336d7d2.png)
